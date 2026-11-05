@@ -1,0 +1,9 @@
+node_modules
+.next
+uploads
+.env*
+!.env.example
+.git
+tsconfig.tsbuildinfo
+dist
+README.md
