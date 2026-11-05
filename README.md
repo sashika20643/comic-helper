@@ -116,3 +116,4 @@ updates a user). Users can also change their own password from the account page 
 - **Character / mechanic / environment fields** – edit `src/lib/design-config.ts`. Fields are stored as JSON,
   so adding or renaming fields needs no database migration. Image tags (Character sheet, Pose, …) live there too.
 - **Database changes** – edit `src/lib/schema.ts`, then `npm run db:generate` and commit the new file in `drizzle/`.
+# comic-helper
