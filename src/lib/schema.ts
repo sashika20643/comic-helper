@@ -44,7 +44,7 @@ export const designItems = pgTable("design_items", {
   updatedAt: updated(),
 });
 
-/** Uploaded image files */
+/** Uploaded files: images, and PDFs attached to planning docs */
 export const assets = pgTable("assets", {
   id: serial("id").primaryKey(),
   storedName: text("stored_name").notNull(),
@@ -54,6 +54,7 @@ export const assets = pgTable("assets", {
   tag: text("tag").notNull().default(""),
   caption: text("caption").notNull().default(""),
   designItemId: integer("design_item_id").references(() => designItems.id, { onDelete: "cascade" }),
+  docId: integer("doc_id").references((): AnyPgColumn => docs.id, { onDelete: "cascade" }),
   uploadedBy: text("uploaded_by"),
   createdAt: created(),
 });

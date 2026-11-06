@@ -1,0 +1,2 @@
+ALTER TABLE "assets" ADD COLUMN "doc_id" integer;--> statement-breakpoint
+ALTER TABLE "assets" ADD CONSTRAINT "assets_doc_id_docs_id_fk" FOREIGN KEY ("doc_id") REFERENCES "public"."docs"("id") ON DELETE cascade ON UPDATE no action;

@@ -2,6 +2,7 @@
 
 import { useTransition } from "react";
 import { Trash2 } from "lucide-react";
+import { LocalTime } from "@/components/local-time";
 import { AutoSaveField } from "@/components/autosave";
 import { deleteDoc, updateDoc } from "@/actions/docs";
 import type { Doc } from "@/lib/schema";
@@ -30,7 +31,7 @@ export function DocEditor({ doc, placeholder, mono, path = [] }: { doc: Doc; pla
         </button>
       </div>
       <p className="mb-4 text-xs text-zinc-400">
-        Last edited {doc.updatedBy ? `by ${doc.updatedBy} ` : ""}· {new Date(doc.updatedAt).toLocaleString()}
+        Last edited {doc.updatedBy ? `by ${doc.updatedBy} ` : ""}· <LocalTime date={doc.updatedAt} />
       </p>
       <AutoSaveField
         key={`c${doc.id}`}

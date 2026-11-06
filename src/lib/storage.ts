@@ -6,7 +6,7 @@ import { eq } from "drizzle-orm";
 import { db, schema } from "./db";
 
 export const UPLOAD_DIR = path.resolve(/*turbopackIgnore: true*/ process.env.UPLOAD_DIR ?? "./uploads");
-export const MAX_UPLOAD_BYTES = 30 * 1024 * 1024;
+export const MAX_UPLOAD_BYTES = 50 * 1024 * 1024;
 
 const EXT: Record<string, string> = {
   "image/png": ".png",
@@ -15,13 +15,17 @@ const EXT: Record<string, string> = {
   "image/gif": ".gif",
   "image/avif": ".avif",
   "image/svg+xml": ".svg",
+  "application/pdf": ".pdf",
 };
 
-export function isAllowedImage(mime: string) {
-  return mime in EXT;
+export function isAllowedFile(mime: string, allowPdf: boolean) {
+  return mime in EXT && (allowPdf || mime !== "application/pdf");
 }
 
-export async function saveFile(file: File, opts: { tag?: string; designItemId?: number | null; user: string }) {
+export async function saveFile(
+  file: File,
+  opts: { tag?: string; designItemId?: number | null; docId?: number | null; user: string },
+) {
   await fs.mkdir(UPLOAD_DIR, { recursive: true });
   const storedName = crypto.randomUUID() + EXT[file.type];
   await fs.writeFile(path.join(/*turbopackIgnore: true*/ UPLOAD_DIR, storedName), Buffer.from(await file.arrayBuffer()));
@@ -34,6 +38,7 @@ export async function saveFile(file: File, opts: { tag?: string; designItemId?: 
       size: file.size,
       tag: opts.tag ?? "",
       designItemId: opts.designItemId ?? null,
+      docId: opts.docId ?? null,
       uploadedBy: opts.user,
     })
     .returning();

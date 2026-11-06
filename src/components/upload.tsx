@@ -18,12 +18,14 @@ export async function uploadFiles(files: File[], extra: Record<string, string | 
 export function DropZone({
   extra,
   multiple = true,
+  accept = "image/*",
   onDone,
   className,
   children,
 }: {
   extra: Record<string, string | number>;
   multiple?: boolean;
+  accept?: string;
   onDone: () => void;
   className?: string;
   children: (state: { busy: boolean; over: boolean; error: string | null }) => ReactNode;
@@ -34,7 +36,16 @@ export function DropZone({
   const [error, setError] = useState<string | null>(null);
 
   async function handle(list: FileList | File[] | null) {
-    const files = Array.from(list ?? []).filter((f) => f.type.startsWith("image/"));
+    const ok = (f: File) =>
+      accept.split(",").some((a) => {
+        a = a.trim();
+        return a.endsWith("/*") ? f.type.startsWith(a.slice(0, -1)) : f.type === a;
+      });
+    const files = Array.from(list ?? []).filter(ok);
+    if (list && list.length && !files.length) {
+      setError("That file type isn't supported here");
+      return;
+    }
     if (!files.length) return;
     setBusy(true);
     setError(null);
@@ -74,7 +85,7 @@ export function DropZone({
       <input
         ref={input}
         type="file"
-        accept="image/*"
+        accept={accept}
         multiple={multiple}
         hidden
         onChange={(e) => {

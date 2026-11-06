@@ -15,6 +15,13 @@
       "when": 1793870783366,
       "tag": "0001_screenplay_folders",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793881655987,
+      "tag": "0002_doc_attachments",
+      "breakpoints": true
     }
   ]
 }
